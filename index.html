@@ -104,22 +104,8 @@
       document.body.appendChild(script);
     </script>
 
-
-
 <div id="vk_ads_136273"></div>
 <script type="text/javascript">
-import bridge from '@vkontakte/vk-bridge';
-import '@vkontakte/vkui';
- 
-bridge.send("VKWebAppInit", {});
-bridge.send("VKWebAppGetAds", {});
-
-bridge.send('VKWebAppGetAds')
-    .then((promoBannerProps) => {
-        this.setState({ promoBannerProps });
-    })
-{ this.state.promoBannerProps && <PromoBanner bannerData={ this.state.promoBannerProps } /> }
-
   setTimeout(function() {
     var adsParams = {"ad_unit_id":136273,"ad_unit_hash":"be6582fce0222415757750594143f46c"};
     function vkAdsInit() {
