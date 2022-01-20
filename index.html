@@ -103,5 +103,30 @@
       };
       document.body.appendChild(script);
     </script>
+
+<div id="vk_ads_136273"></div>
+<script type="text/javascript">
+  setTimeout(function() {
+    var adsParams = {"ad_unit_id":136273,"ad_unit_hash":"be6582fce0222415757750594143f46c"};
+    function vkAdsInit() {
+      VK.Widgets.Ads('vk_ads_136273', {}, adsParams);
+    }
+    if (window.VK && VK.Widgets) {
+      vkAdsInit();
+    } else {
+      if (!window.vkAsyncInitCallbacks) window.vkAsyncInitCallbacks = [];
+      vkAsyncInitCallbacks.push(vkAdsInit);
+      var protocol = ((location.protocol === 'https:') ? 'https:' : 'http:');
+      var adsElem = document.getElementById('vk_ads_136273');
+      var scriptElem = document.createElement('script');
+      scriptElem.type = 'text/javascript';
+      scriptElem.async = true;
+      scriptElem.src = protocol + '//vk.com/js/api/openapi.js?169';
+      adsElem.parentNode.insertBefore(scriptElem, adsElem.nextSibling);
+    }
+  }, 0);
+</script>
+
+
   </body>
 </html>
