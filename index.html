@@ -8,46 +8,6 @@
     <link rel="stylesheet" href="TemplateData/style.css">
   </head>
   <body>
-    <!-- Yandex Games SDK -->
-<script src="https://yandex.ru/games/sdk/v2"></script>
-
-
-<!-- ������ ������� ��� ������ ���� -->
-<script type="text/javascript">
-  var player;
-  var sdk;
-  var payments = null;
-
-
-  YaGames.init({
-    adv: {
-      onAdvClose: wasShown => {
-        console.info('adv closed!');
-      }
-    }
-  })
-    .then(ysdk => {
-      sdk = ysdk;
-      sdk.adv.showFullscreenAdv({ callbacks: {} });
-    });
-</script>
-
-
-<!-- ��������� ������� � ������ ����� -->
-<script>
-  function showFullscrenAd() {
-    sdk.adv.showFullscreenAdv({
-      callbacks: {
-        onClose: function (wasShown) {
-          unityInstance.SendMessage('YandexSDK', 'OnInterstitialShown');
-        },
-        onError: function (error) {
-          unityInstance.SendMessage('YandexSDK', 'OnInterstitialFailed', error);
-        }
-      }
-    })
-  }
-</script>
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600></canvas>
       <div id="unity-loading-bar">
@@ -60,7 +20,7 @@
       <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
         <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Be a pirate</div>
+        <div id="unity-build-title"></div>
       </div>
     </div>
     <script>
@@ -96,11 +56,11 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Be pirate Yandex.loader.js";
+      var loaderUrl = buildUrl + "/Be a pirate VK.loader.js";
       var config = {
-        dataUrl: buildUrl + "/Be pirate Yandex.data.unityweb",
-        frameworkUrl: buildUrl + "/Be pirate Yandex.framework.js.unityweb",
-        codeUrl: buildUrl + "/Be pirate Yandex.wasm.unityweb",
+        dataUrl: buildUrl + "/Be a pirate VK.data.unityweb",
+        frameworkUrl: buildUrl + "/Be a pirate VK.framework.js.unityweb",
+        codeUrl: buildUrl + "/Be a pirate VK.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Amfich",
         productName: "Be a pirate",
@@ -128,7 +88,7 @@
       loadingBar.style.display = "block";
 
       var script = document.createElement("script");
-      var unityI= null;
+      var unityI = null;
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
@@ -144,15 +104,53 @@
         });
       };
       document.body.appendChild(script);
-
-
-      window.onblur = function(){
-        function muteMe(elem) {
-    elem.muted = true;
-    elem.pause();
-}
-}
-
     </script>
+
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
+<script type="text/javascript">
+
+  vkBridge.send('VKWebAppInit');
+
+
+
+  function auth(){
+    vkBridge.send('VKWebAppGetUserInfo').then(_info =>{
+      console.log(_info);
+      unityI.SendMessage('VKSDK', 'AuthenticateSuccess', JSON.stringify(_info));
+    });
+  }
+
+  function getUserData(){
+    vkBridge.send("VKWebAppStorageGet",{"keys":["_save"]}).then(data =>{
+    console.log(data);
+    unityI.SendMessage('VKSDK', 'DataGetting', JSON.stringify(data));
+  });}
+
+  function setUserData(data){
+    console.log(data);
+    vkBridge.send('VKWebAppStorageSet',{"key": "_save" , "value": data}).then(_info =>{
+      console.log("Saved!")});
+  }
+
+  function showCommonAd(){
+    vkBridge.send('VKWebAppShowNativeAds',{ad_format:"interstitial"}).then(data => {
+      console.log(data);});
+  }
+
+  function showFullscrenAd(){
+    vkBridge.send('VKWebAppShowNativeAds',{ad_format:"interstitial"}).then(data => {
+      console.log(data);});
+  }
+
+  function showRewardedAd(){
+    vkBridge.send('VKWebAppShowNativeAds',{ad_format:"reward"}).then(data => {
+      console.log(data);
+      unityI.SendMessage('VKSDK', 'RewardGetting',JSON.stringify(data.result));})
+  }
+
+
+</script>
+
   </body>
 </html>
